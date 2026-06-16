@@ -1,65 +1,418 @@
-# AI-Support-For-Seniors
-SilverBridge is an AI caseworker for older adults. It helps seniors discover support programs they may qualify for, explains eligibility requirements in plain language, remembers their application journey, and guides them step-by-step through accessing critical services.
+# SilverBridge AI
 
+AI-powered voice-first benefits navigator for older adults.
 
+SilverBridge helps seniors discover support programs they may qualify for, understand eligibility requirements in plain language, remember application progress, and receive step-by-step guidance through complex public support systems.
 
+---
 
-### Main System Flow
+# Problem
 
-1. **User talks to the AI through voice or text** (e.g., "I'm 72, live alone, and can't afford my utility bills").
+Many older adults miss out on critical support services because:
 
-2. **FastAPI backend receives the query** and sends it to Gemini to extract structured information about the user's situation (age, income, housing status, etc.).
+* Eligibility rules are confusing
+* Government websites are difficult to navigate
+* Instructions are hard to remember
+* Follow-up actions are often forgotten
+* Many seniors have limited digital literacy
 
-3. **Rule-based eligibility engine** compares the extracted profile against stored program requirements (saved in SQLite) to determine which benefits the user may qualify for.
+SilverBridge acts as an AI caseworker that guides users through the process and remembers their application journey.
 
-4. **Gemini explains the reasoning in plain language**, including why the user may qualify, what information is still missing, and recommended next steps.
+---
 
-5. **The interaction is stored as a memory** in SQLite, and an embedding of the conversation is generated and stored in a vector database (preferably ChromaDB; SQLite can hold metadata and memory records).
-
-6. Later, when the user asks questions like:
-
-   * "What was I supposed to do next?"
-   * "What documents do I still need?"
-   * "What did the support officer tell me?"
-
-   FastAPI performs **semantic search** on the stored embeddings, retrieves relevant memories, and sends them to Gemini.
-
-7. **Gemini generates a personalized response** using both the user's current question and the retrieved context, effectively acting as an AI caseworker that remembers the user's benefit application journey.
-
-### Tech Stack
-
-* **Frontend:** Simple HTML/JS or React
-* **Backend:** FastAPI
-* **LLM:** Gemini
-* **Memory Storage:** SQLite
-* **Vector Search:** ChromaDB
-* **Speech-to-Text (optional):** Whisper or Gemini Audio
-* **Deployment:** Localhost (for demo)
-
-### Core AI Loop
+# Current Architecture
 
 ```text
-User Query
-    ↓
-FastAPI
-    ↓
-Gemini extracts user situation
-    ↓
-Eligibility Rules (SQLite)
-    ↓
-Gemini explains eligibility + next steps
-    ↓
-Store memory + embedding
-    ↓
-Future questions
-    ↓
-Semantic Search (ChromaDB)
-    ↓
-Gemini + Retrieved Memories
-    ↓
-Personalized Guidance
+Frontend (Coming Soon)
+
+        ↓
+
+FastAPI Backend
+
+        ↓
+
+Gemini API
+
+        ↓
+
+SQLite Database
+
+        ↓
+
+ChromaDB Semantic Search
 ```
 
-The key differentiator is that you're not just finding benefits—you are building an **AI caseworker that remembers and guides seniors through the entire support process.**
+---
 
+# Current Features
 
+## 1. AI Chat Assistant
+
+Users can send natural language questions to Gemini through the FastAPI backend.
+
+Example:
+
+> I am 72 years old and live alone.
+
+Gemini responds conversationally.
+
+---
+
+## 2. Memory Storage
+
+Important user information can be stored in SQLite.
+
+Example memories:
+
+* User is 72 years old
+* User lives alone
+* User receives social security
+* User must submit proof of income before Friday
+
+API:
+
+```http
+POST /memory
+```
+
+---
+
+## 3. Memory Retrieval
+
+Stored memories can be viewed.
+
+API:
+
+```http
+GET /memories
+```
+
+---
+
+## 4. Semantic Search with ChromaDB
+
+Memories are automatically embedded and stored in ChromaDB.
+
+Users can retrieve relevant memories using natural language queries.
+
+Examples:
+
+Query:
+
+> income documents
+
+Result:
+
+> User must submit proof of income before Friday
+
+API:
+
+```http
+GET /search?query=income documents
+```
+
+---
+
+# Project Structure
+
+```text
+backend/
+
+├── main.py
+│
+├── routes/
+│   ├── chat.py
+│   └── memory.py
+│
+├── services/
+│   ├── gemini_service.py
+│   ├── memory_service.py
+│   └── chroma_service.py
+│
+├── database/
+│   ├── db.py
+│   └── models.py
+│
+├── data/
+│   └── programs.json
+│
+├── chroma_db/
+│
+├── memory.db
+│
+├── .env
+│
+└── requirements.txt
+```
+
+---
+
+# Tech Stack
+
+Backend:
+
+* FastAPI
+
+LLM:
+
+* Google Gemini
+
+Database:
+
+* SQLite
+
+Vector Database:
+
+* ChromaDB
+
+ORM:
+
+* SQLAlchemy
+
+Environment Variables:
+
+* python-dotenv
+
+---
+
+# Setup Instructions
+
+## 1. Clone Repository
+
+```bash
+git clone <repo-url>
+cd backend
+```
+
+---
+
+## 2. Create Virtual Environment
+
+Windows:
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+Mac/Linux:
+
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+---
+
+## 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+If requirements.txt is missing:
+
+```bash
+pip install fastapi
+pip install uvicorn
+pip install google-generativeai
+pip install python-dotenv
+pip install sqlalchemy
+pip install chromadb
+```
+
+---
+
+## 4. Create .env File
+
+Create:
+
+```text
+.env
+```
+
+Add:
+
+```env
+GEMINI_API_KEY=YOUR_API_KEY_HERE
+```
+
+---
+
+## 5. Start Backend
+
+```bash
+uvicorn main:app --reload
+```
+
+Open:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+Swagger UI should appear.
+
+---
+
+# Available Endpoints
+
+## Chat
+
+```http
+POST /chat
+```
+
+Request:
+
+```json
+{
+  "message": "I am 72 years old and live alone"
+}
+```
+
+---
+
+## Save Memory
+
+```http
+POST /memory
+```
+
+Request:
+
+```json
+{
+  "text":"User is 72 years old",
+  "category":"profile"
+}
+```
+
+---
+
+## Get All Memories
+
+```http
+GET /memories
+```
+
+---
+
+## Semantic Search
+
+```http
+GET /search?query=income documents
+```
+
+---
+
+# Development Progress
+
+## Phase 0 - Setup
+
+* [x] FastAPI setup
+* [x] Gemini integration
+
+## Phase 1 - Memory System
+
+* [x] SQLite memory storage
+* [x] Memory retrieval
+* [x] SQLAlchemy models
+
+## Phase 2 - Semantic Search
+
+* [x] ChromaDB integration
+* [x] Semantic memory retrieval
+
+---
+
+# Next Tasks
+
+## Phase 3 - AI Memory Recall
+
+Goal:
+
+Allow Gemini to automatically use relevant memories when answering.
+
+Example:
+
+User:
+
+> What should I do next?
+
+System:
+
+1. Search ChromaDB
+2. Retrieve relevant memories
+3. Inject memories into Gemini prompt
+4. Generate personalized response
+
+---
+
+## Phase 4 - Benefits Eligibility Engine
+
+Goal:
+
+Help users understand what support programs they may qualify for.
+
+Implementation:
+
+* Create support program database
+* Store eligibility criteria
+* Collect user information through conversation
+* Match user profile to programs
+* Explain eligibility reasoning
+* Generate next steps
+
+Example:
+
+> You may qualify for Senior Utility Assistance because you are over 65 and live alone. The only missing information is proof of income.
+
+---
+
+## Phase 5 - Action Checklist Generator
+
+Goal:
+
+Generate personalized task lists.
+
+Example:
+
+Application Checklist:
+
+* [ ] Gather proof of income
+* [ ] Gather ID
+* [ ] Contact support office
+* [ ] Submit application
+
+---
+
+## Phase 6 - Voice Interface
+
+Goal:
+
+Allow seniors to interact using speech instead of typing.
+
+Possible Stack:
+
+* Whisper
+* Gemini Audio
+* Browser Speech API
+
+---
+
+# Hackathon Demo Vision
+
+Scenario:
+
+1. User asks what support programs they may qualify for.
+2. AI asks clarifying questions.
+3. AI determines likely eligibility.
+4. AI creates a checklist.
+5. AI remembers previous conversations.
+6. User returns later and asks:
+
+   > What do I still need to do?
+7. AI retrieves memories and provides guidance.
+
+This demonstrates AI reasoning, memory, and support-system navigation rather than acting as a simple directory of resources.
