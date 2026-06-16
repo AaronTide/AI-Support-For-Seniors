@@ -1,3 +1,5 @@
+# database/models.py
+
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
