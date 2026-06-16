@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-
+from services.chroma_service import search_memories
 from services.memory_service import save_memory
 
 router = APIRouter()
@@ -47,3 +47,14 @@ def get_memories():
     db.close()
 
     return results
+
+@router.get("/search")
+def search(query: str):
+
+    results = search_memories(query)
+
+    docs = results["documents"][0]
+
+    return {
+        "memories": docs
+    }
