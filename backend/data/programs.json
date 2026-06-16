@@ -1,1 +1,16 @@
-
+[
+  {
+    "name":"Senior Food Assistance",
+    "requirements":[
+      "age >= 65",
+      "low income"
+    ]
+  },
+  {
+    "name":"Utility Bill Support",
+    "requirements":[
+      "low income",
+      "resident"
+    ]
+  }
+]
