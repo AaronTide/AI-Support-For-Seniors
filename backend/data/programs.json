@@ -1,16 +1,36 @@
 [
   {
-    "name":"Senior Food Assistance",
-    "requirements":[
-      "age >= 65",
-      "low income"
+    "name": "Senior Utility Assistance",
+    "description": "Helps seniors pay utility bills.",
+    "requirements": {
+      "min_age": 65,
+      "living_alone": true
+    },
+    "documents": [
+      "Proof of income",
+      "Government ID"
     ]
   },
+
   {
-    "name":"Utility Bill Support",
-    "requirements":[
-      "low income",
-      "resident"
+    "name": "Senior Food Assistance",
+    "description": "Provides food support to eligible seniors.",
+    "requirements": {
+      "min_age": 65
+    },
+    "documents": [
+      "Government ID"
+    ]
+  },
+
+  {
+    "name": "Transportation Assistance",
+    "description": "Provides transportation support for seniors.",
+    "requirements": {
+      "min_age": 60
+    },
+    "documents": [
+      "Government ID"
     ]
   }
 ]
