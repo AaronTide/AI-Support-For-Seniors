@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-
+from services.memory_service import save_memory
 from services.gemini_service import ask_gemini
 from services.memory_service import get_relevant_memories
 router = APIRouter()
@@ -32,6 +32,11 @@ def chat(req: ChatRequest):
     """
 
     answer = ask_gemini(prompt)
+    
+    save_memory(
+        req.message,
+        "conversation"
+      )
     return {
         "response": answer
     }
