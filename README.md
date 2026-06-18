@@ -31,7 +31,7 @@ FastAPI Backend
 
         ↓
 
-Gemini API
+Groq API / optional Gemini fallback
 
         ↓
 
@@ -48,13 +48,13 @@ ChromaDB Semantic Search
 
 ## 1. AI Chat Assistant
 
-Users can send natural language questions to Gemini through the FastAPI backend.
+Users can send natural language questions to the configured AI provider through the FastAPI backend.
 
 Example:
 
 > I am 72 years old and live alone.
 
-Gemini responds conversationally.
+The AI responds conversationally.
 
 ---
 
@@ -155,7 +155,8 @@ Backend:
 
 LLM:
 
-* Google Gemini
+* Groq API
+* Optional Google Gemini fallback
 
 Database:
 
@@ -215,6 +216,7 @@ If requirements.txt is missing:
 ```bash
 pip install fastapi
 pip install uvicorn
+pip install requests
 pip install google-generativeai
 pip install python-dotenv
 pip install sqlalchemy
@@ -234,7 +236,14 @@ Create:
 Add:
 
 ```env
-GEMINI_API_KEY=YOUR_API_KEY_HERE
+GROQ_API_KEY=YOUR_GROQ_API_KEY
+GROQ_MODEL=llama-3.1-8b-instant
+
+# Optional fallback provider
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY
+
+# Optional semantic memory search. Keep false/blank for the fast hackathon demo.
+USE_CHROMA=false
 ```
 
 ---
@@ -311,7 +320,8 @@ GET /search?query=income documents
 ## Phase 0 - Setup
 
 * [x] FastAPI setup
-* [x] Gemini integration
+* [x] Groq integration
+* [x] Optional Gemini fallback
 
 ## Phase 1 - Memory System
 
@@ -332,7 +342,7 @@ GET /search?query=income documents
 
 Goal:
 
-Allow Gemini to automatically use relevant memories when answering.
+Allow the AI provider to automatically use relevant memories when answering.
 
 Example:
 
@@ -344,7 +354,7 @@ System:
 
 1. Search ChromaDB
 2. Retrieve relevant memories
-3. Inject memories into Gemini prompt
+3. Inject memories into the AI prompt
 4. Generate personalized response
 
 ---
