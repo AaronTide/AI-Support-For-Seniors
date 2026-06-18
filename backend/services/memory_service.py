@@ -1,9 +1,11 @@
 
+import os
+
 from database.db import SessionLocal
 from database.models import Memory
 
-from services.chroma_service import add_memory
-from services.chroma_service import search_memories
+
+USE_CHROMA = os.getenv("USE_CHROMA", "").lower() == "true"
 
 def save_memory(text, category):
 
@@ -20,14 +22,21 @@ def save_memory(text, category):
 
     db.refresh(memory)
 
-    add_memory(
-        memory.id,
-        text
-    )
+    if USE_CHROMA:
+        from services.chroma_service import add_memory
+
+        add_memory(
+            memory.id,
+            text
+        )
 
     db.close()
 
 def get_relevant_memories(query):
+    if not USE_CHROMA:
+        return []
+
+    from services.chroma_service import search_memories
 
     results = search_memories(
         query=query,
