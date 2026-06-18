@@ -440,7 +440,15 @@ function buildSafeResponse(response, urgent = false) {
   const urgentText = urgent
     ? "\n\nBecause this may be urgent, consider calling 211 for local support. If there is immediate danger, call emergency services."
     : "";
-  return `${safePrefix}${response || "I could not generate a response."}${urgentText}`;
+  const cleanResponse = stripMarkdownStars(response || "I could not generate a response.");
+  return `${safePrefix}${cleanResponse}${urgentText}`;
+}
+
+function stripMarkdownStars(text) {
+  return text
+    .replace(/\*\*\*(.*?)\*\*\*/g, "$1")
+    .replace(/\*\*(.*?)\*\*/g, "$1")
+    .replace(/\*(.*?)\*/g, "$1");
 }
 
 export default App;
