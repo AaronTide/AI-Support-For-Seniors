@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
+from services.ai_service import ask_ai
 from services.memory_service import save_memory
-from services.gemini_service import ask_gemini
 from services.memory_service import get_relevant_memories
 router = APIRouter()
 
@@ -31,7 +31,7 @@ def chat(req: ChatRequest):
     If not relevant, answer normally.
     """
 
-    answer = ask_gemini(prompt)
+    answer = ask_ai(prompt)
     
     save_memory(
         req.message,
