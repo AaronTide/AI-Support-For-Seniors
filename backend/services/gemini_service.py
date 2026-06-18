@@ -1,20 +1,5 @@
-import google.generativeai as genai
-import os
-
-from dotenv import load_dotenv
-
-load_dotenv()
-
-#print(os.getenv("GEMINI_API_KEY"))
-
-
-genai.configure(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
-
-model = genai.GenerativeModel("gemini-2.5-flash")
+from services.ai_service import ask_ai
 
 
 def ask_gemini(prompt):
-    response = model.generate_content(prompt)
-    return response.text
+    return ask_ai(prompt)
