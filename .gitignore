@@ -1,0 +1,14 @@
+backend/.env
+backend/.env.local
+backend/.env.*
+!backend/.env.example
+backend/memory.db
+backend/chroma_db/
+backend/venv/
+backend/__pycache__/
+
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.*
