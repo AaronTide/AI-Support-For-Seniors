@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
+from services.ai_service import ask_ai
 from services.program_service import load_programs
-from services.gemini_service import ask_gemini
 from services.memory_service import save_memory
 
 
@@ -37,7 +37,7 @@ def eligibility(req: EligibilityRequest):
     Do not provide legal advice.
     Use plain language. Keep it short and to the point.
     """
-    response = ask_gemini(prompt)
+    response = ask_ai(prompt)
 
     save_memory(
     f"Eligibility discussion: {req.situation}",
