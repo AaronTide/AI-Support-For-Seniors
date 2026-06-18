@@ -23,7 +23,7 @@ SilverBridge acts as an AI caseworker that guides users through the process and 
 # Current Architecture
 
 ```text
-Frontend (Coming Soon)
+React Frontend
 
         ↓
 
@@ -395,9 +395,50 @@ Allow seniors to interact using speech instead of typing.
 
 Possible Stack:
 
-* Whisper
-* Gemini Audio
-* Browser Speech API
+* [x] Browser Speech API
+* [ ] Whisper
+* [ ] Gemini Audio
+
+---
+
+# Frontend Setup
+
+The React frontend lives in `frontend/`.
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open:
+
+```text
+http://localhost:5173
+```
+
+The frontend expects the backend at:
+
+```text
+http://127.0.0.1:8000
+```
+
+To override this, create `frontend/.env.local`:
+
+```env
+VITE_API_BASE_URL=http://127.0.0.1:8000
+```
+
+Frontend features:
+
+* Senior-friendly React demo interface
+* Browser voice input when supported
+* Text-to-speech AI replies
+* Eligibility profile form
+* Case memory note saving
+* Saved memory display
+* Emergency support actions
+* Responsible AI disclaimer that final eligibility must be verified
 
 ---
 
